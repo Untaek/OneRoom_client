@@ -13,17 +13,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.untaek.oneroom.R;
+import com.untaek.oneroom.format.ListTitleFormat;
 import com.untaek.oneroom.rest.UserAuthService;
+import com.untaek.oneroom.utility.ListAdapter;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     static public UserAuthService.UserInfo logined = null;
 
-    Button button_login = null;
-    TextView textView_login = null;
     TabLayout tabLayout = null;
     ViewPager viewPager = null;
 
@@ -36,25 +39,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         MainPagerAdapter pagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
-        button_login = (Button) findViewById(R.id.button_go_login);
-        textView_login = (TextView) findViewById(R.id.textView_please_login);
-
-        button_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            }
-        });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(logined != null){
-            textView_login.setText(logined.getNick_name() + "님 안녕하세요");
-        }else{
-            textView_login.setText("로그인 해주세요");
-        }
     }
 
     private class MainPagerAdapter extends FragmentStatePagerAdapter {
@@ -83,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
 
     static public class MainFragment extends Fragment {
         int mNum;
+        Button button_login = null;
+        TextView textView_login = null;
 
         static public MainFragment getInstance(int num){
             MainFragment fragment = new MainFragment();
@@ -102,19 +88,56 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View displayView = null;
-
             switch (mNum){
-                case 1:
+                case 0:
                     displayView = inflater.inflate(R.layout.fragment_room, container, false);
                     break;
-                case 2:
+                case 1:
                     displayView = inflater.inflate(R.layout.fragment_board, container, false);
+                    displayView.findViewById(R.id.button_go_board).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(getContext(), Board1Activity.class);
+                            startActivity(intent);
+                        }
+                    });
+                    ArrayList<ListTitleFormat> list = new ArrayList<>();
+                    ListTitleFormat format = new ListTitleFormat();
+                    format.setTitle("a");
+                    format.setAuthor("b");
+                    format.setDate("c");
+                    list.add(format);list.add(format);list.add(format);list.add(format);list.add(format);
+
+                    ListView listView_popular = (ListView) displayView.findViewById(R.id.listView_popularBoard);
+                    ListAdapter adapter = new ListAdapter(list, getContext());
+                    listView_popular.setAdapter(adapter);
                     break;
-                case 3:
+                case 2:
                     displayView = inflater.inflate(R.layout.fragment_login, container, false);
+                    button_login = (Button) displayView.findViewById(R.id.button_go_login);
+                    textView_login = (TextView) displayView.findViewById(R.id.textView_please_login);
+
+                    button_login.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startActivity(new Intent(getContext(), LoginActivity.class));
+                        }
+                    });
                     break;
             }
             return displayView;
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            if(mNum==2){
+                if(logined != null){
+                    textView_login.setText(logined.getNick_name() + "님 안녕하세요");
+                }else{
+                    textView_login.setText("로그인 해주세요");
+                }
+            }
         }
     }
 }
