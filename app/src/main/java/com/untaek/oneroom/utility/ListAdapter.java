@@ -42,9 +42,9 @@ public class ListAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         View vv = inflater.inflate(R.layout.list_board, viewGroup, false);
-        TextView textView_title = (TextView) view.findViewById(R.id.textView_title);
-        TextView textView_author = (TextView) view.findViewById(R.id.textView_author);
-        TextView textView_date = (TextView) view.findViewById(R.id.textView_date);
+        TextView textView_title = (TextView) vv.findViewById(R.id.textView_title);
+        TextView textView_author = (TextView) vv.findViewById(R.id.textView_author);
+        TextView textView_date = (TextView) vv.findViewById(R.id.textView_date);
 
         textView_title.setText(list.get(i).getTitle());
         textView_author.setText(list.get(i).getAuthor());
@@ -52,4 +52,6 @@ public class ListAdapter extends BaseAdapter {
 
         return vv;
     }
+
+
 }

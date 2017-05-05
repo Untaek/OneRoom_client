@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".act.BoardPostActivity" />
         <activity android:name=".act.LoginActivity" />
         <activity android:name=".act.SignUpActivity" />
         <activity android:name=".act.MainActivity">
@@ -20,7 +21,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".act.Board1Activity"></activity>
+        <activity android:name=".act.Board1Activity" />
+        <activity android:name=".act.BoardWriteActivity" />
+        <activity android:name=".act.RoomBoardActivity" />
+        <activity android:name=".act.RoomPostActivity" />
+        <activity android:name=".act.RoomRegisterActivity" />
+        <activity android:name=".act.RoomSellActivity" />
+        <activity android:name=".act.RoomRegisterListActivity" />
+        <activity android:name=".act.RoomFindMapActivity"></activity>
     </application>
 
 </manifest>

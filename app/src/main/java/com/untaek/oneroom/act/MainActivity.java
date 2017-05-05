@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -91,6 +92,29 @@ public class MainActivity extends AppCompatActivity {
             switch (mNum){
                 case 0:
                     displayView = inflater.inflate(R.layout.fragment_room, container, false);
+                    displayView.findViewById(R.id.button_go_room_find_map).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getContext(), RoomFindMapActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+
+                    displayView.findViewById(R.id.button_go_room_board).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getContext(), RoomBoardActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+
+                    displayView.findViewById(R.id.button_go_room_sell).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getContext(), RoomRegisterListActivity.class);
+                            startActivity(intent);
+                        }
+                    });
                     break;
                 case 1:
                     displayView = inflater.inflate(R.layout.fragment_board, container, false);
@@ -103,14 +127,24 @@ public class MainActivity extends AppCompatActivity {
                     });
                     ArrayList<ListTitleFormat> list = new ArrayList<>();
                     ListTitleFormat format = new ListTitleFormat();
-                    format.setTitle("a");
-                    format.setAuthor("b");
-                    format.setDate("c");
+                    format.setTitle("제목제목제목제목");
+                    format.setAuthor("작성자작성자");
+                    format.setDate("30분 전");
                     list.add(format);list.add(format);list.add(format);list.add(format);list.add(format);
 
                     ListView listView_popular = (ListView) displayView.findViewById(R.id.listView_popularBoard);
-                    ListAdapter adapter = new ListAdapter(list, getContext());
+                    final ListAdapter adapter = new ListAdapter(list, getContext());
                     listView_popular.setAdapter(adapter);
+
+                    listView_popular.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            ListTitleFormat data = (ListTitleFormat) adapter.getItem(position);
+                            Intent intent = new Intent(getContext(), BoardPostActivity.class);
+                            intent.putExtra(ListTitleFormat.BUNDLE, data);
+                            startActivity(intent);
+                        }
+                    });
                     break;
                 case 2:
                     displayView = inflater.inflate(R.layout.fragment_login, container, false);
