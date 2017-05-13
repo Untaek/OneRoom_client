@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.untaek.oneroom.R;
 import com.untaek.oneroom.format.ListTitleFormat;
@@ -27,9 +28,12 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     static public UserAuthService.UserInfo logined = null;
+    static private boolean recreated = false;
+    static public final int LOGIN_REQUEST = 100;
 
     TabLayout tabLayout = null;
     ViewPager viewPager = null;
+    MainPagerAdapter pagerAdapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +42,19 @@ public class MainActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
-        MainPagerAdapter pagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
+        pagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(logined != null){
+            if(!recreated){
+                this.recreate();
+                recreated = !recreated;
+            }
+        }
     }
 
     private class MainPagerAdapter extends FragmentStatePagerAdapter {
@@ -63,6 +78,17 @@ public class MainActivity extends AppCompatActivity {
             else if(position==1) return "게시판";
             else if (position==2) return "로그인";
             return super.getPageTitle(position);
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return super.getItemPosition(object);
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            return super.instantiateItem(container, position);
+
         }
     }
 
@@ -117,34 +143,42 @@ public class MainActivity extends AppCompatActivity {
                     });
                     break;
                 case 1:
-                    displayView = inflater.inflate(R.layout.fragment_board, container, false);
-                    displayView.findViewById(R.id.button_go_board).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(getContext(), Board1Activity.class);
-                            startActivity(intent);
-                        }
-                    });
-                    ArrayList<ListTitleFormat> list = new ArrayList<>();
-                    ListTitleFormat format = new ListTitleFormat();
-                    format.setTitle("제목제목제목제목");
-                    format.setAuthor("작성자작성자");
-                    format.setDate("30분 전");
-                    list.add(format);list.add(format);list.add(format);list.add(format);list.add(format);
+                    int layout;
+                    if(logined == null){
+                        layout = R.layout.fragment_require_login;
+                        displayView = inflater.inflate(layout, container, false);
+                    }
+                    else{
+                        layout = R.layout.fragment_board;
+                        displayView = inflater.inflate(layout, container, false);
+                        displayView.findViewById(R.id.button_go_board).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(getContext(), Board1Activity.class);
+                                startActivity(intent);
+                            }
+                        });
+                        ArrayList<ListTitleFormat> list = new ArrayList<>();
+                        ListTitleFormat format = new ListTitleFormat();
+                        format.setTitle("제목제목제목제목");
+                        format.setAuthor("작성자작성자");
+                        format.setDate("30분 전");
+                        list.add(format);list.add(format);list.add(format);list.add(format);list.add(format);
 
-                    ListView listView_popular = (ListView) displayView.findViewById(R.id.listView_popularBoard);
-                    final ListAdapter adapter = new ListAdapter(list, getContext());
-                    listView_popular.setAdapter(adapter);
+                        ListView listView_popular = (ListView) displayView.findViewById(R.id.listView_popularBoard);
+                        final ListAdapter adapter = new ListAdapter(list, getContext());
+                        listView_popular.setAdapter(adapter);
 
-                    listView_popular.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            ListTitleFormat data = (ListTitleFormat) adapter.getItem(position);
-                            Intent intent = new Intent(getContext(), BoardPostActivity.class);
-                            intent.putExtra(ListTitleFormat.BUNDLE, data);
-                            startActivity(intent);
-                        }
-                    });
+                        listView_popular.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                ListTitleFormat data = (ListTitleFormat) adapter.getItem(position);
+                                Intent intent = new Intent(getContext(), BoardPostActivity.class);
+                                intent.putExtra(ListTitleFormat.BUNDLE, data);
+                                startActivity(intent);
+                            }
+                        });
+                    }
                     break;
                 case 2:
                     displayView = inflater.inflate(R.layout.fragment_login, container, false);
@@ -154,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
                     button_login.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            startActivity(new Intent(getContext(), LoginActivity.class));
+                            startActivityForResult(new Intent(getContext(), LoginActivity.class), LOGIN_REQUEST);
                         }
                     });
                     break;
@@ -163,11 +197,23 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            if(requestCode == LOGIN_REQUEST){
+                if(resultCode == RESULT_OK){
+                    getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+                    Toast.makeText(getContext(), "onResult : " + this.mNum, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+
+        @Override
         public void onResume() {
             super.onResume();
             if(mNum==2){
                 if(logined != null){
                     textView_login.setText(logined.getNick_name() + "님 안녕하세요");
+
                 }else{
                     textView_login.setText("로그인 해주세요");
                 }

@@ -1,6 +1,7 @@
 package com.untaek.oneroom.rest;
 
 import android.app.Activity;
+import android.content.Intent;
 
 import com.untaek.oneroom.act.MainActivity;
 import com.untaek.oneroom.utility.Toaster;
@@ -34,7 +35,7 @@ public class RetrofitManager {
     static public final int LOGIN_FAILED = 400;
 
     private void build(){
-        String url = "http://45.32.51.155/api/";
+        String url = "http://45.32.51.155:8015/api/";
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -81,6 +82,7 @@ public class RetrofitManager {
                         Toaster.success(activity);
                         Toaster.showSomeValue(activity, userInfo.email + ", " + userInfo.nick_name + ", " + userInfo.university);
                         MainActivity.logined = userInfo;
+                        activity.setResult(MainActivity.RESULT_OK);
                         activity.finish();
                     }
                     else if(userInfo.code() == RetrofitManager.LOGIN_FAILED){
