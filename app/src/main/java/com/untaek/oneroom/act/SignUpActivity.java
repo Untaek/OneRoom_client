@@ -10,7 +10,7 @@ import android.widget.RadioButton;
 import com.untaek.oneroom.R;
 import com.untaek.oneroom.utility.Toaster;
 import com.untaek.oneroom.rest.RetrofitManager;
-import com.untaek.oneroom.rest.UserAuthService;
+import com.untaek.oneroom.rest.UserService;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -52,7 +52,7 @@ public class SignUpActivity extends AppCompatActivity {
                     if(editText_pw.getText().toString().equals(editText_pw_confirm.getText().toString())){
                         RetrofitManager retrofitManager = RetrofitManager.getInstance();
 
-                        UserAuthService.SignUpUserInfo user = new UserAuthService.SignUpUserInfo(email, nick_name, university, pw, deal_type);
+                        UserService.SignUpUserInfo user = new UserService.SignUpUserInfo(email, nick_name, university, pw, deal_type);
                         retrofitManager.signUp(user, SignUpActivity.this);
                     }
                     else{

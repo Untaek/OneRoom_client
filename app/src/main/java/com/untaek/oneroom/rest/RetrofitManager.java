@@ -1,7 +1,6 @@
 package com.untaek.oneroom.rest;
 
 import android.app.Activity;
-import android.content.Intent;
 
 import com.untaek.oneroom.act.MainActivity;
 import com.untaek.oneroom.utility.Toaster;
@@ -11,10 +10,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-/**
- * Created by ejdej on 2017-04-15.
- */
 
 public class RetrofitManager {
     private static RetrofitManager instance = null;
@@ -28,11 +23,17 @@ public class RetrofitManager {
         return instance;
     }
 
-    private UserAuthService userAuthService = null;
+    private UserService userService = null;
+    private RoomService roomService = null;
 
-    static public final int OK = 200;
-    static public final int SIGN_UP_EMAIL_DUPLICATED = 300;
-    static public final int LOGIN_FAILED = 400;
+    private static final int OK = 200;
+    private static final int SIGN_UP_EMAIL_DUPLICATED = 300;
+    private static final int LOGIN_FAILED = 400;
+
+    interface Listener{
+        void getPrefer(UserService.Prefer prefer);
+    }
+    Listener listener;
 
     private void build(){
         String url = "http://45.32.51.155:8015/api/";
@@ -40,16 +41,18 @@ public class RetrofitManager {
                 .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        userAuthService = retrofit.create(UserAuthService.class);
+        userService = retrofit.create(UserService.class);
+        roomService = retrofit.create(RoomService.class);
+
     }
 
-    public void signUp(UserAuthService.SignUpUserInfo signUpUserInfo, final Activity activity){
-        Call<UserAuthService.DBStatus> call = userAuthService.createUser(signUpUserInfo);
-        call.enqueue(new Callback<UserAuthService.DBStatus>() {
+    public void signUp(UserService.SignUpUserInfo signUpUserInfo, final Activity activity){
+        Call<UserService.DBStatus> call = userService.createUser(signUpUserInfo);
+        call.enqueue(new Callback<UserService.DBStatus>() {
             @Override
-            public void onResponse(Call<UserAuthService.DBStatus> call, Response<UserAuthService.DBStatus> response) {
+            public void onResponse(Call<UserService.DBStatus> call, Response<UserService.DBStatus> response) {
                 if(response.isSuccessful()){
-                    UserAuthService.DBStatus status = response.body();
+                    UserService.DBStatus status = response.body();
                     // 성공
                     if(status.code() == RetrofitManager.OK){
                         Toaster.success(activity);
@@ -64,7 +67,7 @@ public class RetrofitManager {
             }
 
             @Override
-            public void onFailure(Call<UserAuthService.DBStatus> call, Throwable t) {
+            public void onFailure(Call<UserService.DBStatus> call, Throwable t) {
                 Toaster.happenedSomethingWrong(activity);
                 Toaster.showSomeValue(activity, call.toString());
             }
@@ -72,18 +75,17 @@ public class RetrofitManager {
     }
 
     public void logIn(String email, String password, final Activity activity){
-        Call<UserAuthService.UserInfo> call = userAuthService.logIn(new UserAuthService.LoginInfo(email, password));
-        call.enqueue(new Callback<UserAuthService.UserInfo>() {
+        Call<UserService.UserInfo> call = userService.logIn(new UserService.LoginInfo(email, password));
+        call.enqueue(new Callback<UserService.UserInfo>() {
             @Override
-            public void onResponse(Call<UserAuthService.UserInfo> call, Response<UserAuthService.UserInfo> response) {
+            public void onResponse(Call<UserService.UserInfo> call, Response<UserService.UserInfo> response) {
                 if(response.isSuccessful()){
-                    UserAuthService.UserInfo userInfo = response.body();
+                    UserService.UserInfo userInfo = response.body();
                     if(userInfo.code() == RetrofitManager.OK){
                         Toaster.success(activity);
                         Toaster.showSomeValue(activity, userInfo.email + ", " + userInfo.nick_name + ", " + userInfo.university);
                         MainActivity.logined = userInfo;
-                        activity.setResult(MainActivity.RESULT_OK);
-                        activity.finish();
+                        getPrefer(userInfo.getId(), activity);
                     }
                     else if(userInfo.code() == RetrofitManager.LOGIN_FAILED){
                         Toaster.loginFailed(activity);
@@ -93,9 +95,67 @@ public class RetrofitManager {
             }
 
             @Override
-            public void onFailure(Call<UserAuthService.UserInfo> call, Throwable t) {
+            public void onFailure(Call<UserService.UserInfo> call, Throwable t) {
                 Toaster.happenedSomethingWrong(activity);
                 Toaster.showSomeValue(activity, call.toString());
+            }
+        });
+    }
+
+    public void updatePrefer(UserService.Prefer prefer, final Activity activity){
+        Call<UserService.DBStatus> call = userService.updatePrefer(prefer.user_id, prefer);
+        call.enqueue(new Callback<UserService.DBStatus>() {
+            @Override
+            public void onResponse(Call<UserService.DBStatus> call, Response<UserService.DBStatus> response) {
+                if(response.isSuccessful()){
+                    if(response.body().code() == OK){
+                        Toaster.success(activity);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserService.DBStatus> call, Throwable t) {
+                Toaster.happenedSomethingWrong(activity);
+            }
+        });
+    }
+
+    public void getPrefer(long id, final Activity activity){
+        Call<UserService.Prefer> call = userService.getPrefer(id);
+        call.enqueue(new Callback<UserService.Prefer>() {
+            @Override
+            public void onResponse(Call<UserService.Prefer> call, Response<UserService.Prefer> response) {
+                if(response.isSuccessful()){
+                    UserService.Prefer body = response.body();
+                    if(body.code == OK){
+                        MainActivity.prefer = body;
+                        activity.setResult(MainActivity.RESULT_OK);
+                        activity.finish();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserService.Prefer> call, Throwable t) {
+                Toaster.happenedSomethingWrong(activity);
+            }
+        });
+    }
+
+    public void registerRoom(RoomService.Room room, final Activity activity){
+        Call<RoomService.DBStatus> call = roomService.registerRoom(room);
+        call.enqueue(new Callback<RoomService.DBStatus>() {
+            @Override
+            public void onResponse(Call<RoomService.DBStatus> call, Response<RoomService.DBStatus> response) {
+                if(response.isSuccessful()){
+                    activity.finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RoomService.DBStatus> call, Throwable t) {
+
             }
         });
     }

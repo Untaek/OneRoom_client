@@ -18,81 +18,81 @@
         android:layout_marginTop="8dp">
 
         <EditText
-            android:id="@+id/editText13"
+            android:id="@+id/editText_room_building_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:ems="10"
-            android:hint="주거 형태"
+            android:hint="주거 형태(원룸, 오피스텔 등) *필수"
             android:inputType="textPersonName"
             app:layout_constraintTop_toBottomOf="@+id/editText12"
             tools:layout_editor_absoluteX="16dp" />
 
         <EditText
-            android:id="@+id/editText11"
+            android:id="@+id/editText_room_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:layout_marginTop="8dp"
             android:ems="10"
-            android:hint="주소"
+            android:hint="주소 *필수"
             android:inputType="textPersonName"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/editText12"
+            android:id="@+id/editText_room_floor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:ems="10"
-            android:hint="층수"
+            android:hint="층수(방의 실제 층수) *필수"
             android:inputType="textPersonName"
             app:layout_constraintTop_toBottomOf="@+id/editText11"
             tools:layout_editor_absoluteX="16dp" />
 
         <EditText
-            android:id="@+id/editText14"
+            android:id="@+id/editText_room_size"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:ems="10"
-            android:hint="평수"
+            android:hint="평수 *필수"
             android:inputType="textPersonName"
             app:layout_constraintTop_toBottomOf="@+id/editText13"
             tools:layout_editor_absoluteX="16dp" />
 
         <EditText
-            android:id="@+id/editText16"
+            android:id="@+id/editText_room_infra"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:ems="10"
-            android:hint="편의 시설"
+            android:hint="주변 편의 시설(편의점, 카페 등)"
             android:inputType="textPersonName"
             app:layout_constraintTop_toBottomOf="@+id/editText15"
             tools:layout_editor_absoluteX="16dp" />
 
-        <EditText
-            android:id="@+id/editText15"
+        <CheckBox
+            android:id="@+id/checkbox_room_parking"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:ems="10"
             android:hint="주차 가능 여부"
             android:inputType="textPersonName"
             app:layout_constraintTop_toBottomOf="@+id/editText14"
             tools:layout_editor_absoluteX="16dp" />
 
         <EditText
-            android:id="@+id/editText17"
+            android:id="@+id/editText_room_options"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:ems="10"
             android:hint="그 외 옵션"
-            android:inputType="textPersonName"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:gravity="top"
             app:layout_constraintTop_toBottomOf="@+id/editText16"
             tools:layout_editor_absoluteX="16dp" />
 
