@@ -5,6 +5,8 @@ import android.app.Activity;
 import com.untaek.oneroom.act.MainActivity;
 import com.untaek.oneroom.utility.Toaster;
 
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,10 +32,9 @@ public class RetrofitManager {
     private static final int SIGN_UP_EMAIL_DUPLICATED = 300;
     private static final int LOGIN_FAILED = 400;
 
-    interface Listener{
-        void getPrefer(UserService.Prefer prefer);
+    public interface ListListener{
+        void onReceive(ArrayList arrayList);
     }
-    Listener listener;
 
     private void build(){
         String url = "http://45.32.51.155:8015/api/";
@@ -43,7 +44,6 @@ public class RetrofitManager {
                 .build();
         userService = retrofit.create(UserService.class);
         roomService = retrofit.create(RoomService.class);
-
     }
 
     public void signUp(UserService.SignUpUserInfo signUpUserInfo, final Activity activity){
@@ -149,14 +149,33 @@ public class RetrofitManager {
             @Override
             public void onResponse(Call<RoomService.DBStatus> call, Response<RoomService.DBStatus> response) {
                 if(response.isSuccessful()){
-                    activity.finish();
+                    if(response.body().code == OK)
+                        activity.finish();
+                    else
+                        Toaster.showSomeValue(activity, response.body().code);
                 }
             }
 
             @Override
-            public void onFailure(Call<RoomService.DBStatus> call, Throwable t) {
+            public void onFailure(Call<RoomService.DBStatus> call, Throwable t) {}
+        });
+    }
+
+    public void getRooms(long id, Activity activity, final ListListener listener){
+        Call<ArrayList<RoomService.Room>> call = roomService.getRooms(id);
+        call.enqueue(new Callback<ArrayList<RoomService.Room>>() {
+            @Override
+            public void onResponse(Call<ArrayList<RoomService.Room>> call, Response<ArrayList<RoomService.Room>> response) {
+                if(response.isSuccessful()){
+                    listener.onReceive(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<RoomService.Room>> call, Throwable t) {
 
             }
         });
+
     }
 }

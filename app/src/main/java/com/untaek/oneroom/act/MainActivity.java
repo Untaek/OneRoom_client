@@ -24,7 +24,7 @@ import com.untaek.oneroom.R;
 import com.untaek.oneroom.format.ListTitleFormat;
 import com.untaek.oneroom.rest.RetrofitManager;
 import com.untaek.oneroom.rest.UserService;
-import com.untaek.oneroom.utility.ListAdapter;
+import com.untaek.oneroom.utility.BoardListAdapter;
 
 import java.util.ArrayList;
 
@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                         list.add(format);list.add(format);list.add(format);list.add(format);list.add(format);
 
                         ListView listView_popular = (ListView) displayView.findViewById(R.id.listView_popularBoard);
-                        final ListAdapter adapter = new ListAdapter(list, getContext());
+                        final BoardListAdapter adapter = new BoardListAdapter(list, getContext());
                         listView_popular.setAdapter(adapter);
 
                         listView_popular.setOnItemClickListener(new AdapterView.OnItemClickListener() {

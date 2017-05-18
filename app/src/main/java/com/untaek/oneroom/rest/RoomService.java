@@ -1,10 +1,14 @@
 package com.untaek.oneroom.rest;
 
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 
 /**
  * Created by ejdej on 2017-05-15.
@@ -15,8 +19,14 @@ public interface RoomService {
         public Room(String address,
                     String building_type,
                     String floor,
-                    int size){}
+                    int size){
+            this.address = address;
+            this.building_type = building_type;
+            this.floor = floor;
+            this.size = size;
+        }
         int id;
+        long user_id;
         String address;
         String building_type;
         String floor;
@@ -28,6 +38,11 @@ public interface RoomService {
         String options;
         String[] images;
         String[] thumbnails;
+        int code;
+
+        public int getCode() {
+            return code;
+        }
 
         public int getId() {
             return id;
@@ -128,7 +143,7 @@ public interface RoomService {
 
     class RoomBoard{
         int id;
-        int owner;
+        int user_id;
         int room;
         int cost;
         String title;
@@ -145,6 +160,8 @@ public interface RoomService {
 
     @POST("rooms/register/")
     Call<DBStatus> registerRoom(@Body Room room);
+    @GET("rooms/register/{id}")
+    Call<ArrayList<Room>> getRooms(@Path("id") long id);
     @POST("rooms/post")
     Call<DBStatus> postRoom(@Body RoomBoard roomBoard);
 }

@@ -11,15 +11,14 @@ import android.widget.ListView;
 
 import com.untaek.oneroom.R;
 import com.untaek.oneroom.format.ListTitleFormat;
-import com.untaek.oneroom.utility.ListAdapter;
+import com.untaek.oneroom.utility.BoardListAdapter;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Board1Activity extends AppCompatActivity {
 
     ListView listView_board = null;
-    ListAdapter adapter = null;
+    BoardListAdapter adapter = null;
     ArrayList<ListTitleFormat> list = new ArrayList<>();
 
     @Override
@@ -28,7 +27,7 @@ public class Board1Activity extends AppCompatActivity {
         setContentView(R.layout.activity_board1);
 
         listView_board = (ListView) findViewById(R.id.listView_board);
-        adapter = new ListAdapter(list, Board1Activity.this);
+        adapter = new BoardListAdapter(list, Board1Activity.this);
         listView_board.setAdapter(adapter);
         ListTitleFormat format = new ListTitleFormat();
         format.setTitle("제목제목제목제목");

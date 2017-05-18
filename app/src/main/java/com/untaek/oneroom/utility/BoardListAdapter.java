@@ -16,8 +16,8 @@ import java.util.ArrayList;
  * Created by ejdej on 2017-05-04.
  */
 
-public class ListAdapter extends BaseAdapter {
-    public ListAdapter(ArrayList<ListTitleFormat> arrayList, Context context){
+public class BoardListAdapter extends BaseAdapter {
+    public BoardListAdapter(ArrayList<ListTitleFormat> arrayList, Context context){
         this.list = arrayList;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
