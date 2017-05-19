@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                     displayView.findViewById(R.id.button_go_room_board).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(getContext(), RoomBoardActivity.class);
+                            Intent intent = new Intent(getContext(), RoomPostDetailActivity.class);
                             startActivity(intent);
                         }
                     });
@@ -130,6 +130,14 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(getContext(), RoomRegisterListActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+
+                    displayView.findViewById(R.id.button_go_posted_rooms).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(getContext(), RoomMyPostListActivity.class);
                             startActivity(intent);
                         }
                     });

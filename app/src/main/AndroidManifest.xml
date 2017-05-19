@@ -3,7 +3,7 @@
     package="com.untaek.oneroom">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDnDhTHOYef5WS07uA9fo2jUQo5Pki_RxE"/>
+            android:value="AIzaSyDnDhTHOYef5WS07uA9fo2jUQo5Pki_RxE" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -31,12 +31,13 @@
         </activity>
         <activity android:name=".act.Board1Activity" />
         <activity android:name=".act.BoardWriteActivity" />
-        <activity android:name=".act.RoomBoardActivity" />
+        <activity android:name=".act.RoomPostDetailActivity" />
         <activity android:name=".act.RoomPostActivity" />
         <activity android:name=".act.RoomRegisterActivity" />
         <activity android:name=".act.RoomSellActivity" />
         <activity android:name=".act.RoomRegisterListActivity" />
-        <activity android:name=".act.RoomFindMapActivity"></activity>
+        <activity android:name=".act.RoomFindMapActivity" />
+        <activity android:name=".act.RoomMyPostListActivity"></activity>
     </application>
 
 </manifest>

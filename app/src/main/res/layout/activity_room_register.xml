@@ -59,7 +59,7 @@
             android:ems="10"
             android:hint="평수 *필수"
             android:inputType="numberDecimal"
-            app:layout_constraintTop_toBottomOf="@+id/editText13"
+            app:layout_constraintTop_toBottomOf="@+id/editText_room_post_cost_add"
             tools:layout_editor_absoluteX="16dp" />
 
         <EditText
@@ -70,7 +70,7 @@
             android:ems="10"
             android:hint="주변 편의 시설(편의점, 카페 등)"
             android:inputType="textPersonName"
-            app:layout_constraintTop_toBottomOf="@+id/editText15"
+            app:layout_constraintTop_toBottomOf="@+id/editText_room_post_admin_expen"
             tools:layout_editor_absoluteX="16dp" />
 
         <CheckBox
@@ -80,7 +80,7 @@
             android:layout_marginTop="8dp"
             android:hint="주차 가능 여부"
             android:inputType="textPersonName"
-            app:layout_constraintTop_toBottomOf="@+id/editText14"
+            app:layout_constraintTop_toBottomOf="@+id/editText_room_post_desc"
             tools:layout_editor_absoluteX="16dp" />
 
         <EditText

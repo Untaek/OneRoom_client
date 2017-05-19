@@ -57,7 +57,8 @@ public class RoomRegisterActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        RoomService.Room room = new RoomService.Room(editText_address.getText().toString(),
+        RoomService.Room room = new RoomService.Room(MainActivity.logined.getId(),
+                editText_address.getText().toString(),
                 editText_building_type.getText().toString(),
                 editText_floor.getText().toString(),
                 Integer.parseInt(editText_size.getText().toString()));

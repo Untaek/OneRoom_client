@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.untaek.oneroom.R;
 
-public class RoomBoardActivity extends AppCompatActivity {
+public class RoomPostDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

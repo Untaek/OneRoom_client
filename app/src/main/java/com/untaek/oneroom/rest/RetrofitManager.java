@@ -33,7 +33,11 @@ public class RetrofitManager {
     private static final int LOGIN_FAILED = 400;
 
     public interface ListListener{
-        void onReceive(ArrayList arrayList);
+        void onReceive(ArrayList<RoomService.Room> arrayList);
+    }
+
+    public interface RoomPostListListener{
+        void onReceive(ArrayList<RoomService.RoomDetail> list);
     }
 
     private void build(){
@@ -161,21 +165,61 @@ public class RetrofitManager {
         });
     }
 
-    public void getRooms(long id, Activity activity, final ListListener listener){
-        Call<ArrayList<RoomService.Room>> call = roomService.getRooms(id);
-        call.enqueue(new Callback<ArrayList<RoomService.Room>>() {
+    public void getRooms(long id, final Activity activity, final ListListener listener){
+        Call<RoomService.ResultList> call = roomService.getRooms(id);
+        call.enqueue(new Callback<RoomService.ResultList>() {
             @Override
-            public void onResponse(Call<ArrayList<RoomService.Room>> call, Response<ArrayList<RoomService.Room>> response) {
+            public void onResponse(Call<RoomService.ResultList> call, Response<RoomService.ResultList> response) {
                 if(response.isSuccessful()){
-                    listener.onReceive(response.body());
+                    if(response.body().code == OK){
+                        listener.onReceive(response.body().result);
+                        Toaster.showSomeValue(activity, response.body().result.size()+"");
+                    }
                 }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<RoomService.Room>> call, Throwable t) {
-
+            public void onFailure(Call<RoomService.ResultList> call, Throwable t) {
+                Toaster.happenedSomethingWrong(activity);
             }
         });
+    }
 
+    public void postRoom(RoomService.RoomPost post, final Activity activity){
+        Call<RoomService.DBStatus> call = roomService.postRoom(post);
+        call.enqueue(new Callback<RoomService.DBStatus>() {
+            @Override
+            public void onResponse(Call<RoomService.DBStatus> call, Response<RoomService.DBStatus> response) {
+                if(response.isSuccessful()){
+                    if(response.body().code == OK){
+                        activity.finish();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RoomService.DBStatus> call, Throwable t) {
+                Toaster.happenedSomethingWrong(activity);
+            }
+        });
+    }
+
+    public void getMyRoomPosts(final Activity activity, final RoomPostListListener listener){
+        Call<RoomService.RoomDetailList> call = roomService.getMyRoomPosts(MainActivity.logined.getId());
+        call.enqueue(new Callback<RoomService.RoomDetailList>() {
+            @Override
+            public void onResponse(Call<RoomService.RoomDetailList> call, Response<RoomService.RoomDetailList> response) {
+                if(response.isSuccessful()){
+                    if(response.body().code == OK){
+                        listener.onReceive(response.body().result);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RoomService.RoomDetailList> call, Throwable t) {
+                Toaster.happenedSomethingWrong(activity);
+            }
+        });
     }
 }
