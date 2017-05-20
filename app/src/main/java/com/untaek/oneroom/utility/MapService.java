@@ -14,6 +14,6 @@ public class MapService {
     private Context context;
     LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     public void init(){
-        
+
     }
 }

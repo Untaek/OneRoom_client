@@ -10,6 +10,6 @@ public class RoomPostDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_room_board);
+        setContentView(R.layout.activity_room_post_detail);
     }
 }
