@@ -37,7 +37,8 @@
         <activity android:name=".act.RoomSellActivity" />
         <activity android:name=".act.RoomRegisterListActivity" />
         <activity android:name=".act.RoomFindMapActivity" />
-        <activity android:name=".act.RoomMyPostListActivity"></activity>
+        <activity android:name=".act.RoomMyPostListActivity" />
+        <activity android:name=".act.RoomFindFilterActivity"></activity>
     </application>
 
 </manifest>

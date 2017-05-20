@@ -6,6 +6,7 @@ import com.untaek.oneroom.act.MainActivity;
 import com.untaek.oneroom.utility.Toaster;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -213,6 +214,23 @@ public class RetrofitManager {
                     if(response.body().code == OK){
                         listener.onReceive(response.body().result);
                     }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RoomService.RoomDetailList> call, Throwable t) {
+                Toaster.happenedSomethingWrong(activity);
+            }
+        });
+    }
+
+    public void getRoomPosts(Map<String, String> filters, final Activity activity, final RoomPostListListener listener){
+        Call<RoomService.RoomDetailList> call = roomService.getRoomPosts(filters);
+        call.enqueue(new Callback<RoomService.RoomDetailList>() {
+            @Override
+            public void onResponse(Call<RoomService.RoomDetailList> call, Response<RoomService.RoomDetailList> response) {
+                if(response.body().code == OK){
+                    listener.onReceive(response.body().result);
                 }
             }
 

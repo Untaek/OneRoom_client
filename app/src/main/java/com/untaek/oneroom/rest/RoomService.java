@@ -4,12 +4,14 @@ import android.os.Parcelable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.QueryMap;
 
 /**
  * Created by ejdej on 2017-05-15.
@@ -319,11 +321,11 @@ public interface RoomService {
     Call<ResultList> getRooms(@Path("id") long id);
     @POST("rooms/post/")
     Call<DBStatus> postRoom(@Body RoomPost roomPost);
-    @GET("rooms/post/{id}")
+    @GET("rooms/post/{id}") // 하나만 가져오기
     Call<RoomDetail> getRoomPost(@Path("id") long id);
     @GET("rooms/posts/{id}")
     Call<RoomDetailList> getMyRoomPosts(@Path("id") long id);
-    @GET("rooms/posts/")
-    Call<RoomDetailList> getRoomPosts();
+    @GET("rooms/posts/") // 조건에 따라 가져오기
+    Call<RoomDetailList> getRoomPosts(@QueryMap Map<String, String> filters);
 
 }

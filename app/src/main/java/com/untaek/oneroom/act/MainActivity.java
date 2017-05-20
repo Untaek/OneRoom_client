@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                     displayView.findViewById(R.id.button_go_room_board).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(getContext(), RoomPostDetailActivity.class);
+                            Intent intent = new Intent(getContext(), RoomFindFilterActivity.class);
                             startActivity(intent);
                         }
                     });
